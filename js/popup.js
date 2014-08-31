@@ -55,8 +55,8 @@ function updateDom(){
     var sitesWrapper = document.getElementById("sites_list");
     sitesWrapper.innerHTML = "";
     for(var i=0; i<blockedUrls.length; i++){
-        var siteDiv = getSiteDiv(getSpan(blockedUrls[i], "site_url"),
-            getSpan("remove", "remove_but"));
+        var siteDiv = getSiteDiv(getSpan(blockedUrls[i], "site_url", -1),
+            getSpan("remove", "remove_but", i));
         sitesWrapper.appendChild(siteDiv);
         sitesWrapper.appendChild(document.createElement("br"))
     }
@@ -69,11 +69,18 @@ function getSiteDiv(span1, span2){
     return div;
 }
 
-function getSpan(content, classvalue){
+function getSpan(content, classvalue, i){
     //<span class="remove_but">remove</span>
     var span = document.createElement("span");
     span.innerHTML = content;
     span.setAttribute("class", classvalue)
+    if(i!=-1){
+        span.addEventListener('click', function(){
+            blockedUrls.splice(i, 1);
+            localStorage["blocked_urls"] = JSON.stringify(blockedUrls);
+            updateDom();
+        }, false);
+    }
     return span;
 }
 
