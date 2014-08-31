@@ -9,7 +9,7 @@
                   "https://*/*",
                   "http://*/*"],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["js/background.js"]
   },
 
   "manifest_version": 2,

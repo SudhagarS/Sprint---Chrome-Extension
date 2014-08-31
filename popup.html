@@ -10,8 +10,15 @@
 
       #sites_list{
         width: 300px;
-        max-height: 200px;
+        height: 180px;
         overflow: scroll;
+      }
+      
+      #error{
+        display: block;
+        height: 20px;
+        color: red;
+        margin-bottom: 5px;
       }
 
       .site{
@@ -29,6 +36,12 @@
   </head>
   <body>
     <input type="button" value="Start Sprint!" id="start_button"/>
+
+    <div>
+      <input type="text" name="new_site_text" size="30"/> <input type="button" value="Add" id="add_button">
+      <span id="error"></span>
+    </div>
+
     <div id="sites_list">
       <!--<div class="site">
         <span class="site_url">www.facebook.com</span><span class="remove_but">remove</span>
@@ -36,12 +49,8 @@
       <br>
       -->
     </div>
-
     <br>
     
-    <div>
-      <input type="text" name="new_site_text" size="30"/> <input type="button" value="Add" name="new_site_button">
-    </div>
     <script src="js/popup.js"></script>
   </body>
 </html>
