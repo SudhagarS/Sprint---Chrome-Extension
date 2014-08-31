@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Lets Sprint</title>
+    <style>
+      body {
+        min-width: 357px;
+        overflow-x: hidden;
+      }
+
+      #sites_list{
+        width: 300px;
+        max-height: 200px;
+        overflow: scroll;
+      }
+
+      .site{
+      }
+
+      .site_url{
+        float: left;
+      }
+
+      .remove_but{
+        float: right;
+      }
+    </style>
+    
+  </head>
+  <body>
+    <input type="button" value="Start Sprint!" id="start_button"/>
+    <div id="sites_list">
+      <!--<div class="site">
+        <span class="site_url">www.facebook.com</span><span class="remove_but">remove</span>
+      </div>
+      <br>
+      -->
+    </div>
+
+    <br>
+    
+    <div>
+      <input type="text" name="new_site_text" size="30"/> <input type="button" value="Add" name="new_site_button">
+    </div>
+    <script src="js/popup.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,20 @@
+{
+  "name": "Sprint",
+  "version": "1.0",
+  "description": "Just work, without distrations!",
+  "permissions": ["webRequest", 
+                  "webRequestBlocking",
+                  "storage",
+                  "alarms",
+                  "https://*/*",
+                  "http://*/*"],
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "manifest_version": 2,
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": "images/icon.png"
+  }
+}
