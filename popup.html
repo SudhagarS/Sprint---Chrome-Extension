@@ -4,45 +4,166 @@
     <title>Lets Sprint</title>
     <style>
       body {
-        min-width: 357px;
-        overflow-x: hidden;
+        width: 357px;
+      }
+      
+      #duration_wrapper{
+        font-size: 18px;
+        width: 110px;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: bold;
+      }
+
+      #duration_wrapper .left_arrow{
+        float: left;
+        margin-right: 13px;
+        cursor: pointer;
+      }
+
+      #duration_wrapper .right_arrow{
+        float: right;
+        margin-left: 13px;
+        cursor: pointer;
+      }
+      #duration_wrapper .duration{
+        color:#287aa9;
       }
 
       #sites_list{
+        margin-left: auto;
+        margin-right: auto;
         width: 300px;
-        height: 180px;
-        overflow: scroll;
+        overflow: auto;
       }
-      
+
+      .site{
+        margin-bottom: -8px;
+        padding: 4px;
+        padding-left: 8px;
+        width:280px;
+        overflow:inherit;
+        border:1px solid #ddd;
+      }
+
+      .site .site_url{
+        float: left;
+      }
+
+      .site .remove_but{
+        float: right;
+        cursor: pointer;
+        font-style: italic;
+        color: #287aa9;
+      }
+
+      #add_wrapper{
+        margin-left: auto;
+        margin-right: auto;
+        width: 300px;
+      }
+
+      #add_button{
+        border: 0px;
+        background: transparent;
+        font-size: 20px;
+        cursor: pointer;
+      }
       #error{
         display: block;
         height: 20px;
         color: red;
         margin-bottom: 5px;
       }
-
-      .site{
+      
+      input{
+        /* to get rid of weird blue border around button*/
+        outline: none;
       }
 
-      .site_url{
-        float: left;
+      input[type=text]
+      {
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        width:210px;
+        min-height: 22px;
+        padding: 2px 4px 2px 4px;
+        font-size: 12px;
+        -moz-transition: all .2s linear;
+        -webkit-transition: all .2s linear;
+        transition: all .2s linear;
       }
 
-      .remove_but{
-        float: right;
-        cursor: pointer;
+      input[type=text]:focus
+      {
+        width: 235px;
+        border-color: #51a7e8;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.1),0 0 5px rgba(81,167,232,0.5);
+        outline: none;
       }
+
+      /*generated from http://www.bestcssbuttongenerator.com/ */
+      #start_button {
+        width:357px;
+        text-align: center;
+        -moz-box-shadow: 0px 0px 0px 0px #3dc21b;
+        -webkit-box-shadow: 0px 0px 0px 0px #3dc21b;
+        box-shadow: 0px 0px 0px 0px #3dc21b;
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #44c767), color-stop(1, #5cbf2a));
+        background:-moz-linear-gradient(top, #44c767 5%, #5cbf2a 100%);
+        background:-webkit-linear-gradient(top, #44c767 5%, #5cbf2a 100%);
+        background:-o-linear-gradient(top, #44c767 5%, #5cbf2a 100%);
+        background:-ms-linear-gradient(top, #44c767 5%, #5cbf2a 100%);
+        background:linear-gradient(to bottom, #44c767 5%, #5cbf2a 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#44c767', endColorstr='#5cbf2a',GradientType=0);
+        background-color:#44c767;
+        border:2px solid #18ab29;
+        display:inline-block;
+        cursor:pointer;
+        color:#ffffff;
+        font-family:Trebuchet MS;
+        font-size:19px;
+        font-weight:bold;
+        font-style:italic;
+        padding:13px 29px;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #2f6627;
+      }
+      #start_button:hover {
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #5cbf2a), color-stop(1, #44c767));
+        background:-moz-linear-gradient(top, #5cbf2a 5%, #44c767 100%);
+        background:-webkit-linear-gradient(top, #5cbf2a 5%, #44c767 100%);
+        background:-o-linear-gradient(top, #5cbf2a 5%, #44c767 100%);
+        background:-ms-linear-gradient(top, #5cbf2a 5%, #44c767 100%);
+        background:linear-gradient(to bottom, #5cbf2a 5%, #44c767 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#5cbf2a', endColorstr='#44c767',GradientType=0);
+        background-color:#5cbf2a;
+      }
+      #start_button:active {
+        position:relative;
+        top:1px;
+      }
+
     </style>
     
   </head>
   <body>
     <input type="button" value="Start Sprint!" id="start_button"/>
-
-    <div>
-      <input type="text" name="new_site_text" size="30"/> <input type="button" value="Add" id="add_button">
-      <span id="error"></span>
+    <br/>
+    <center>
+      <h4>Block Duration</h4>
+    </center>
+    
+    <div id="duration_wrapper">
+      <span class="left_arrow">&#8211;</span>
+        <span class="duration">1 hour</span>
+      <span class="right_arrow">+</span>
     </div>
-
+    
+    <center>
+      <h4>Blocked Sites</h4>
+    </center>
     <div id="sites_list">
       <!--<div class="site">
         <span class="site_url">www.facebook.com</span><span class="remove_but">remove</span>
@@ -50,8 +171,12 @@
       <br>
       -->
     </div>
-    <br>
-    
+
+    <div id="add_wrapper">
+      <input type="text" name="new_site_text" size="40"/> &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="+" id="add_button">
+      <span id="error"></span>
+    </div>
+
     <script src="js/popup.js"></script>
   </body>
 </html>
