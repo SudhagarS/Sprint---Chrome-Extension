@@ -9,19 +9,48 @@ var blockedUrls;
 
 document.body.onload = function() {
     console.log("onload of body");
-    if(localStorage["sprint_duration"] === undefined){
-        localStorage["sprint_duration"] = defaultDuration;    
+
+    if(localStorage["sprint_timer"]===undefined){
+        document.getElementById("sprint_timer").style.height = "0px";
+        document.getElementById("sprint_timer").style.visibility = "hidden";
+
+        if(localStorage["sprint_duration"] === undefined){
+            localStorage["sprint_duration"] = defaultDuration;    
+        }
+        setDuration(parseInt(localStorage["sprint_duration"]));
+        var tempUrlsStr = localStorage["sprint_blocked_urls"]
+        if(!tempUrlsStr){
+            localStorage["sprint_blocked_urls"] = JSON.stringify(defaultUrls);
+        }
+        blockedUrls = JSON.parse(localStorage["sprint_blocked_urls"]);
+        updateDom();
+        addStartButtonClickListener();
+        addAddButtonClickListener();
+        addArrowsClickListener();    
     }
-    setDuration(parseInt(localStorage["sprint_duration"]));
-    var tempUrlsStr = localStorage["sprint_blocked_urls"]
-    if(!tempUrlsStr){
-        localStorage["sprint_blocked_urls"] = JSON.stringify(defaultUrls);
+    else{
+        document.getElementById("sprint_default").style.height = "0px";
+        document.getElementById("sprint_default").style.visibility = "hidden";
+        document.getElementById("sprint_timer").style.height = "auto";
+        setTimer();
     }
-    blockedUrls = JSON.parse(localStorage["sprint_blocked_urls"]);
-    updateDom();
-    addStartButtonClickListener();
-    addAddButtonClickListener();
-    addArrowsClickListener();
+}
+
+function setTimer(){
+    var timerDiv = document.getElementById("sprint_timer");
+    
+    var startedTime = parseInt(localStorage["sprint_timer"])
+
+    var timeElapsedInMins = ((Date.now() - startedTime) / (1000*60)) % 60;
+    var alarmDurationInMin = parseInt(localStorage["sprint_duration"]) * 60;
+    var remainingMins = Math.floor(alarmDurationInMin - timeElapsedInMins)
+    timerDiv.innerHTML = convertToHrMinForm(remainingMins);
+}
+
+function convertToHrMinForm(minutes){
+    var hr = Math.floor(minutes / 60);
+    var remMin = minutes % 60;
+    return hr + ":" + remMin;
 }
 
 function setDuration(duration){
@@ -53,6 +82,14 @@ function addArrowsClickListener(){
 function addStartButtonClickListener(){
     var button = document.getElementById("start_button");
     button.addEventListener('click', function(){
+        document.getElementById("sprint_timer").style.height = "auto";
+        document.getElementById("sprint_timer").style.visibility = "visible";
+        
+        document.getElementById("sprint_default").style.height = "0px";
+        document.getElementById("sprint_default").style.visibility = "hidden";
+
+        document.body.style.height = "200px";
+
         chrome.extension.getBackgroundPage().initSprint(blockedUrls);
     }, false);
 }
