@@ -1,6 +1,6 @@
 {
   "name": "Sprint",
-  "version": "1.0",
+  "version": "0.1",
   "description": "Just work, without distrations!",
   "permissions": ["webRequest", 
                   "webRequestBlocking",
