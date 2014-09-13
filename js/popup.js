@@ -55,7 +55,7 @@ function convertToHrMinForm(minutes){
 
 function setDuration(duration){
     var durSpan = document.getElementsByClassName("duration")[0];
-    durSpan.innerHTML = duration + (duration==1?" hour" : " hours");
+    durSpan.innerHTML = duration + (duration==1 ? " hour" : " hours");
 }
 
 function addArrowsClickListener(){
@@ -91,6 +91,7 @@ function addStartButtonClickListener(){
         document.body.style.height = "200px";
 
         chrome.extension.getBackgroundPage().initSprint(blockedUrls);
+        setTimer();
     }, false);
 }
 
