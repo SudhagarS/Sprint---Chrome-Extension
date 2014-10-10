@@ -1,68 +1,63 @@
 var defaultUrls = ["www.facebook.com",
-                    "www.twitter.com",
-                    "www.youtube.com",
-                    "www.quora.com",
-                    "www.reddit.com"
-                    ]
+    "www.twitter.com",
+    "www.youtube.com",
+    "www.quora.com",
+    "www.reddit.com"
+]
 var defaultDuration = 2;
 var blockedUrls;
 
 document.body.onload = function() {
     console.log("onload of body");
-
-    if(localStorage["sprint_timer"]===undefined){
-        document.getElementById("sprint_timer").style.height = "0px";
-        document.getElementById("sprint_timer").style.visibility = "hidden";
-
-        if(localStorage["sprint_duration"] === undefined){
-            localStorage["sprint_duration"] = defaultDuration;    
-        }
-        setDuration(parseInt(localStorage["sprint_duration"]));
-        var tempUrlsStr = localStorage["sprint_blocked_urls"]
-        if(!tempUrlsStr){
-            localStorage["sprint_blocked_urls"] = JSON.stringify(defaultUrls);
-        }
-        blockedUrls = JSON.parse(localStorage["sprint_blocked_urls"]);
-        updateDom();
+    if (localStorage["sprint_duration"] === undefined) {
+        localStorage["sprint_duration"] = defaultDuration;
+    }
+    setDuration(parseInt(localStorage["sprint_duration"]));
+    var tempUrlsStr = localStorage["sprint_blocked_urls"]
+    if (!tempUrlsStr) {
+        localStorage["sprint_blocked_urls"] = JSON.stringify(defaultUrls);
+    }
+    blockedUrls = JSON.parse(localStorage["sprint_blocked_urls"]);
+    updateDom();
+    
+    if (localStorage["sprint_timer"] === undefined) {
         addStartButtonClickListener();
         addAddButtonClickListener();
-        addArrowsClickListener();    
-    }
-    else{
-        document.getElementById("sprint_default").style.height = "0px";
-        document.getElementById("sprint_default").style.visibility = "hidden";
-        document.getElementById("sprint_timer").style.height = "auto";
-        setTimer();
+        addArrowsClickListener();
+    } else {
+        hideElems();
+        setTime();
     }
 }
 
-function setTimer(){
-    var timerDiv = document.getElementById("sprint_timer");
-    
-    var startedTime = parseInt(localStorage["sprint_timer"])
+function setTime() {
+    var button = document.getElementById("start_button");
 
-    var timeElapsedInMins = ((Date.now() - startedTime) / (1000*60)) % 60;
+    var startedTime = parseInt(localStorage["sprint_timer"])
+    var timeElapsedInMins = ((Date.now() - startedTime) / (1000 * 60)) % 60;
     var alarmDurationInMin = parseInt(localStorage["sprint_duration"]) * 60;
     var remainingMins = Math.floor(alarmDurationInMin - timeElapsedInMins)
-    timerDiv.innerHTML = convertToHrMinForm(remainingMins);
+    
+    button.value = convertToHrMinForm(remainingMins);
+    button.style.background = "#9E0B30";
 }
 
-function convertToHrMinForm(minutes){
+function convertToHrMinForm(minutes) {
     var hr = Math.floor(minutes / 60);
     var remMin = minutes % 60;
     return hr + ":" + remMin;
 }
 
-function setDuration(duration){
+function setDuration(duration) {
     var durSpan = document.getElementsByClassName("duration")[0];
-    durSpan.innerHTML = duration + (duration==1 ? " hour" : " hours");
+    durSpan.innerHTML = duration + (duration == 1 ? " hour" : " hours");
 }
 
-function addArrowsClickListener(){
+function addArrowsClickListener() {
     var leftArrow = document.getElementsByClassName("left_arrow")[0];
-    leftArrow.addEventListener('click', function(){
+    leftArrow.addEventListener('click', function() {
         curDur = parseInt(localStorage["sprint_duration"]);
-        if(curDur==1){
+        if (curDur == 1) {
             return;
         }
         curDur--;
@@ -71,7 +66,7 @@ function addArrowsClickListener(){
     });
 
     var rightArrow = document.getElementsByClassName("right_arrow")[0];
-    rightArrow.addEventListener('click', function(){
+    rightArrow.addEventListener('click', function() {
         curDur = parseInt(localStorage["sprint_duration"]);
         curDur++;
         localStorage["sprint_duration"] = curDur;
@@ -79,84 +74,85 @@ function addArrowsClickListener(){
     });
 }
 
-function addStartButtonClickListener(){
+function addStartButtonClickListener() {
     var button = document.getElementById("start_button");
-    button.addEventListener('click', function(){
-        document.getElementById("sprint_timer").style.height = "auto";
-        document.getElementById("sprint_timer").style.visibility = "visible";
-        
-        document.getElementById("sprint_default").style.height = "0px";
-        document.getElementById("sprint_default").style.visibility = "hidden";
-
-        document.body.style.height = "200px";
-
+    button.addEventListener('click', function() {
         chrome.extension.getBackgroundPage().initSprint(blockedUrls);
-        setTimer();
+        hideElems();
+        setTime();
     }, false);
 }
 
-function addAddButtonClickListener(){
+function addAddButtonClickListener() {
     var button = document.getElementById("add_button");
-    button.addEventListener('click', function(){
+    button.addEventListener('click', function() {
         console.log("Add button clicked");
         var textfield = document.getElementsByName("new_site_text")[0];
         var url = textfield.value;
         var isValidUrl = checkUrl(url);
-        if(isValidUrl){
+        if (isValidUrl) {
             blockedUrls.push(url);
             localStorage["sprint_blocked_urls"] = JSON.stringify(blockedUrls);
             updateDom();
             textfield.value = "";
             setErrorContent("");
-        }
-        else{
-            setErrorContent(url.length==0 ? "Enter url" : "Url is invalid");
+        } else {
+            setErrorContent(url.length == 0 ? "Enter url" : "Url is invalid");
         }
     }, false);
 }
 
-function setErrorContent(content){
+function setErrorContent(content) {
     var error = document.getElementById("error");
     error.innerHTML = content;
 }
 
-function updateDom(){
+function updateDom() {
     var sitesWrapper = document.getElementById("sites_list");
     sitesWrapper.innerHTML = "";
-    for(var i=0; i<blockedUrls.length; i++){
+    for (var i = 0; i < blockedUrls.length; i++) {
         var siteDiv = getSiteDiv(getSpan(blockedUrls[i], "site_url", -1),
-            i>2 ? getSpan("remove", "remove_but", i): null);
+            i > 1 ? getSpan("remove", "remove_but", i) : null);
         siteDiv.setAttribute("class", "site");
         sitesWrapper.appendChild(siteDiv);
         sitesWrapper.appendChild(document.createElement("br"))
-    }
+    };
 }
 
-function getSiteDiv(span1, span2){
+function getSiteDiv(span1, span2) {
     var div = document.createElement("div");
     div.appendChild(span1);
-    if(span2){
+    if (span2) {
         div.appendChild(span2);
     }
     return div;
 }
 
-function getSpan(content, classvalue, i){
+function getSpan(content, classvalue, i) {
     //<span class="remove_but">remove</span>
     var span = document.createElement("span");
     span.innerHTML = content;
-    span.setAttribute("class", classvalue)
-    if(i!=-1){
-        span.addEventListener('click', function(){
+    if (i != -1) {
+        span.setAttribute("class", classvalue + " dohide");
+        span.addEventListener('click', function() {
             blockedUrls.splice(i, 1);
             localStorage["sprint_blocked_urls"] = JSON.stringify(blockedUrls);
             updateDom();
         }, false);
+    } else {
+        span.setAttribute("class", classvalue);
     }
     return span;
 }
 
-function checkUrl(url){
+function checkUrl(url) {
     var r = /(www\.)?[a-z\d]+\.com/;
     return r.test(url);
+}
+
+function hideElems() {
+    var elemsArr = document.getElementsByClassName("dohide");
+    for (var i = 0; i < elemsArr.length; i++) {
+        elemsArr[i].style.visibility = "hidden";
+    };
 }

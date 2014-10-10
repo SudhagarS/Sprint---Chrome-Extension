@@ -9,7 +9,7 @@ function initSprint(blockedUrls) {
     console.log('Sprint icon clicked');
     localStorage["sprint_timer"] = Date.now();
     chrome.browserAction.setIcon({
-        path: "images/icon2.png"
+        path: "images/icon_active.png"
     });
     chrome.webRequest.onBeforeRequest.addListener(callback, {urls: processUrls(blockedUrls)}, opt_extraInfoSpec);
     var alarmDurationInHrs = parseInt(localStorage["sprint_duration"])
@@ -20,7 +20,7 @@ function initSprint(blockedUrls) {
         localStorage.removeItem("sprint_timer");
         chrome.webRequest.onBeforeRequest.removeListener(callback);
         chrome.browserAction.setIcon({
-            path: "images/icon.png"
+            path: "images/icon_inactive.png"
         });
     });
     console.log('alarm created');

@@ -118,7 +118,7 @@
         background:linear-gradient(to bottom, #44c767 5%, #5cbf2a 100%);
         filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#44c767', endColorstr='#5cbf2a',GradientType=0);
         background-color:#44c767;
-        border:2px solid #18ab29;
+        border:2px solid;
         display:inline-block;
         cursor:pointer;
         color:#ffffff;
@@ -153,7 +153,7 @@
         font-size: 100px;
       }
     </style>
-    
+
   </head>
   <body>
     <div id="sprint_default">
@@ -164,9 +164,9 @@
       </center>
     
       <div id="duration_wrapper">
-        <span class="left_arrow">&#8211;</span>
+        <span class="left_arrow dohide">&#8211;</span>
           <span class="duration">1 hour</span>
-        <span class="right_arrow">+</span>
+        <span class="right_arrow dohide">+</span>
       </div>
     
       <center>
@@ -181,14 +181,11 @@
       </div>
 
       <div id="add_wrapper">
-        <input type="text" name="new_site_text" size="40"/> &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="+" id="add_button">
-        <span id="error"></span>
+        <input type="text" name="new_site_text" size="40" class="dohide"/> &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="+" id="add_button" class="dohide">
+        <span id="error" class="dohide"></span>
       </div>
     </div>
 
-    <div id="sprint_timer">
-      0:00
-    </div>
     <script src="js/popup.js"></script>
   </body>
 </html>
