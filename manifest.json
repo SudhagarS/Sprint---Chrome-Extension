@@ -1,6 +1,7 @@
 {
   "name": "Sprint",
-  "version": "0.1",
+  "version": "0.3",
+  "author": "Sudhagar",
   "description": "Just work, without distrations!",
   "permissions": ["webRequest", 
                   "webRequestBlocking",
@@ -11,7 +12,7 @@
   "background": {
     "scripts": ["js/background.js"]
   },
-
+  "icons": { "128": "images/icon_128.png" },
   "manifest_version": 2,
   "browser_action": {
     "default_popup": "popup.html",

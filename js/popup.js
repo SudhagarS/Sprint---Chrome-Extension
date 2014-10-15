@@ -1,11 +1,12 @@
 var defaultUrls = ["www.facebook.com",
-    "www.twitter.com",
+    "twitter.com",
     "www.youtube.com",
     "www.quora.com",
     "www.reddit.com"
 ]
 var defaultDuration = 2;
 var blockedUrls;
+var intervalId;
 
 document.body.onload = function() {
     console.log("onload of body");
@@ -19,7 +20,7 @@ document.body.onload = function() {
     }
     blockedUrls = JSON.parse(localStorage["sprint_blocked_urls"]);
     updateDom();
-    
+
     if (localStorage["sprint_timer"] === undefined) {
         addStartButtonClickListener();
         addAddButtonClickListener();
@@ -27,25 +28,36 @@ document.body.onload = function() {
     } else {
         hideElems();
         setTime();
+        intervalId = setInterval(setTime, 1000);
     }
+
 }
 
 function setTime() {
     var button = document.getElementById("start_button");
 
     var startedTime = parseInt(localStorage["sprint_timer"])
-    var timeElapsedInMins = ((Date.now() - startedTime) / (1000 * 60)) % 60;
-    var alarmDurationInMin = parseInt(localStorage["sprint_duration"]) * 60;
-    var remainingMins = Math.floor(alarmDurationInMin - timeElapsedInMins)
-    
-    button.value = convertToHrMinForm(remainingMins);
-    button.style.background = "#9E0B30";
+    console.log(startedTime);
+    if (isNaN(startedTime)) {
+        // it s over
+        button.value = "Start Sprint!";
+        button.style.background = "#52a3f5"
+    } else {
+        var timeElapsedInSecs = ((Date.now() - startedTime) / (1000)) % 60;
+        var alarmDurationInSec = parseInt(localStorage["sprint_duration"]) * 60 * 60;
+        var remainingSecs = Math.floor(alarmDurationInSec - timeElapsedInSecs)
+        button.value = convertToHrMinSecForm(remainingSecs);
+        button.style.background = "#9E0B30";
+    }
 }
 
-function convertToHrMinForm(minutes) {
-    var hr = Math.floor(minutes / 60);
-    var remMin = minutes % 60;
-    return hr + ":" + remMin;
+function convertToHrMinSecForm(seconds) {
+    var min = Math.floor(seconds / 60);
+    var remSec = seconds % 60;
+
+    var hr = Math.floor(min / 60);
+    var remMin = min % 60;
+    return hr + ":" + pad2(remMin) + ":" + pad2(remSec);
 }
 
 function setDuration(duration) {
@@ -77,9 +89,12 @@ function addArrowsClickListener() {
 function addStartButtonClickListener() {
     var button = document.getElementById("start_button");
     button.addEventListener('click', function() {
-        chrome.extension.getBackgroundPage().initSprint(blockedUrls);
-        hideElems();
-        setTime();
+        if (localStorage["sprint_timer"] === undefined) {
+            chrome.extension.getBackgroundPage().initSprint(blockedUrls);
+            hideElems();
+            setTime();
+            intervalId = setInterval(setTime, 1000);
+        }
     }, false);
 }
 
@@ -148,6 +163,10 @@ function getSpan(content, classvalue, i) {
 function checkUrl(url) {
     var r = /(www\.)?[a-z\d]+\.com/;
     return r.test(url);
+}
+
+function pad2(number) {
+    return (number < 10 ? '0' : '') + number;
 }
 
 function hideElems() {

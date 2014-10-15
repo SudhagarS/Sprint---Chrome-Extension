@@ -1,6 +1,8 @@
-var callback = function (details) {
+var callback = function(details) {
     console.log("Intercepted: " + details.url);
-    return {cancel: true};
+    return {
+        cancel: true
+    };
 }
 
 var opt_extraInfoSpec = ["blocking"];
@@ -11,11 +13,15 @@ function initSprint(blockedUrls) {
     chrome.browserAction.setIcon({
         path: "images/icon_active.png"
     });
-    chrome.webRequest.onBeforeRequest.addListener(callback, {urls: processUrls(blockedUrls)}, opt_extraInfoSpec);
+    chrome.webRequest.onBeforeRequest.addListener(callback, {
+        urls: processUrls(blockedUrls)
+    }, opt_extraInfoSpec);
     var alarmDurationInHrs = parseInt(localStorage["sprint_duration"])
-    chrome.alarms.create("SprintAlarm", {when: (Date.now() + (alarmDurationInHrs*60*60*1000) )});
-    
-    chrome.alarms.onAlarm.addListener(function (alarm) {
+    chrome.alarms.create("SprintAlarm", {
+        when: (Date.now() + (alarmDurationInHrs * 60 * 60 * 1000))
+    });
+
+    chrome.alarms.onAlarm.addListener(function(alarm) {
         console.log('alarm called');
         localStorage.removeItem("sprint_timer");
         chrome.webRequest.onBeforeRequest.removeListener(callback);
@@ -27,10 +33,9 @@ function initSprint(blockedUrls) {
 }
 
 
-
-function processUrls(urls){
+function processUrls(urls) {
     var urlsProcessed = urls.slice()
-    for(var i=0; i<urlsProcessed.length; i++){
+    for (var i = 0; i < urlsProcessed.length; i++) {
         urlsProcessed[i] = "*://" + urlsProcessed[i] + "/*";
     }
     return urlsProcessed;
