@@ -1,6 +1,6 @@
 {
   "name": "Sprint",
-  "version": "0.3",
+  "version": "0.4",
   "author": "Sudhagar",
   "description": "Just work, without distrations!",
   "permissions": ["webRequest", 
