@@ -37,13 +37,12 @@ function setTime() {
     var button = document.getElementById("start_button");
 
     var startedTime = parseInt(localStorage["sprint_timer"])
-    console.log(startedTime);
     if (isNaN(startedTime)) {
         // it s over
         button.value = "Start Sprint!";
         button.style.background = "#52a3f5"
     } else {
-        var timeElapsedInSecs = ((Date.now() - startedTime) / (1000)) % 60;
+        var timeElapsedInSecs = (Date.now() - startedTime) / (1000);
         var alarmDurationInSec = parseInt(localStorage["sprint_duration"]) * 60 * 60;
         var remainingSecs = Math.floor(alarmDurationInSec - timeElapsedInSecs)
         button.value = convertToHrMinSecForm(remainingSecs);
